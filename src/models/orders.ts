@@ -7,11 +7,11 @@ export interface Order {
 }
 
 export interface OrderItem {
-  id: string;
+  id?: string;
   quantity: number;
-  options: string[];
+  options?: string[];
   burrito: Burrito;
-  order: Order;
+  order?: Order;
 }
 
 export interface CreateOrderInput {

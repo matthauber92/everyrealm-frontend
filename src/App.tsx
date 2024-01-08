@@ -2,6 +2,7 @@ import AppLayout from "./common/AppLayout.tsx";
 import {Route, Routes} from "react-router-dom";
 import CustomerPage from "./CustomerPage.tsx";
 import OrdersPage from "./OrdersPage.tsx";
+import "./App.css";
 
 function App() {
 
