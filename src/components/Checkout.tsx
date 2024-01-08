@@ -1,28 +1,12 @@
-import {OrderItem} from "./models/orders.ts";
+import {OrderItem} from "../models/orders.ts";
 import {List, Card, Divider, Typography, Button, Modal} from "antd";
 import {ShoppingCartOutlined} from "@ant-design/icons";
+import {getOrderTotal} from "../utils/helpers.ts";
 const { confirm } = Modal;
 
 interface CheckoutProps {
   items: OrderItem[];
   handleCheckout: (cost: string) => void;
-}
-
-interface Burritos {
-  key: string;
-  quantity: number;
-  price: number;
-  total: number;
-}
-
-// group together burritos and added up total cost
-const getTotalPrice = (items: OrderItem[]) => {
-  const allBurritos: Burritos[] = items.map((orderItem: OrderItem)=> {
-    const { name, size, price } = orderItem.burrito;
-    const key = `${name}-${size}`;
-    return { key, quantity: orderItem.quantity, price, total: orderItem.quantity * price };
-  });
-  return allBurritos.reduce((sum, group) => sum + group.total, 0);
 }
 
 const Checkout = ({items, handleCheckout}: CheckoutProps) => {
@@ -68,12 +52,12 @@ const Checkout = ({items, handleCheckout}: CheckoutProps) => {
       <Divider className="mt-3 mb-3"/>
       <Typography style={{fontWeight: 'bold'}}>Total:</Typography>
       <Typography className="float-start">
-        Total: ${getTotalPrice(items).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        Order Total: ${getOrderTotal(items)}
       </Typography>
       <Button
         className="float-end"
         disabled={items.length === 0}
-        onClick={ () => showConfirm(getTotalPrice(items).toLocaleString(undefined, { minimumFractionDigits: 2 }))}
+        onClick={ () => showConfirm(getOrderTotal(items))}
       >Checkout</Button>
     </Card>
   )

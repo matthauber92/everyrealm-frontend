@@ -1,7 +1,7 @@
 import AppLayout from "./common/AppLayout.tsx";
 import {Route, Routes} from "react-router-dom";
-import CustomerPage from "./CustomerPage.tsx";
-import OrdersPage from "./OrdersPage.tsx";
+import CustomerPage from "./pages/CustomerPage.tsx";
+import OrdersPage from "./pages/OrdersPage.tsx";
 import "./App.css";
 
 function App() {

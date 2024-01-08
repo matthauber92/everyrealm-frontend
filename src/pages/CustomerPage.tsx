@@ -1,18 +1,19 @@
 import {useEffect, useState} from "react";
-import {BurritoService, OrderService} from "./services";
 import {AxiosError, AxiosResponse} from "axios";
 import {Row, Col, message} from "antd";
-import {Burrito} from "./models/burrito.ts";
-import BurritoCard from "./BurritoCard.tsx";
-import {OrderItem} from "./models/orders.ts";
-import Checkout from "./Checkout.tsx";
+import {Burrito} from "../models/burrito.ts";
+import {OrderItem} from "../models/orders.ts";
+import BurritoCard from "../components/BurritoCard.tsx";
+import Checkout from "../components/Checkout.tsx";
+import {createOrder} from "../services/OrderService.ts";
+import {getBurritos} from "../services/BurritoService.ts";
 
 const CustomerPage = () => {
   const [burritos, setBurritos] = useState<Burrito[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
   useEffect(() => {
-    BurritoService.getBurritos().then((res: AxiosResponse) => {
+    getBurritos().then((res: AxiosResponse) => {
       setBurritos(res.data);
     }).catch((e: AxiosError) => {
       console.log(e);
@@ -25,7 +26,7 @@ const CustomerPage = () => {
       totalCost: cost
     }
 
-    OrderService.createOrder(order).then(() => {
+    createOrder(order).then(() => {
       setOrderItems([]);
       message.success("Order has been placed.")
     }).catch((e: AxiosError) => {

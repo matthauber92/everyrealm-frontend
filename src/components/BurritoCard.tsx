@@ -1,8 +1,8 @@
 import {Row, Col, Card, Select, Typography} from "antd";
-import {Burrito} from "./models/burrito.ts";
+import {Burrito} from "../models/burrito.ts";
 import {useEffect, useState} from "react";
 import {MinusCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
-import {OrderItem} from "./models/orders.ts";
+import {OrderItem} from "../models/orders.ts";
 
 interface BurritoCardProps {
   id: string;
@@ -13,8 +13,8 @@ interface BurritoCardProps {
   removeBurrito: (burritoName: string, size: string, quantity: number) => void;
 }
 
+const sizes = ['REGULAR', 'MEDIUM', 'LARGE', 'XL'];
 const BurritoCard = ({id, name, burritoInfo, orderItems, addBurrito, removeBurrito}: BurritoCardProps) => {
-  const sizes: string[] = burritoInfo.map(x => x.size);
   const defaultPrice = burritoInfo.filter(x => x.size === 'REGULAR')[0]?.price.toLocaleString(undefined, { minimumFractionDigits: 2 });
   const [price, setPrice] = useState<string>(defaultPrice)
   const [selectedSize, setSelectedSize] = useState<string>("REGULAR");

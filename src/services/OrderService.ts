@@ -3,11 +3,13 @@ import {AxiosResponse, AxiosError} from "axios";
 import {Burrito} from "../models/burrito.ts";
 import {CreateOrderInput, Order} from "../models/orders.ts";
 
+const API_KEY = localStorage.getItem("apiKey");
+
 function getOrders(): Promise<AxiosResponse<Order[]>> {
   return api.get('api/orders', {
     withCredentials: true,
     headers: {
-      'X-API-KEY': 'every-realm',
+      'X-API-KEY': API_KEY,
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
     }
@@ -20,7 +22,7 @@ function getOrderById(id: string): Promise<AxiosResponse<Order>> {
   return api.get(`api/orders/${id}`, {
     withCredentials: true,
     headers: {
-      'X-API-KEY': 'every-realm',
+      'X-API-KEY': API_KEY,
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
     }
