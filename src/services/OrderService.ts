@@ -34,7 +34,8 @@ function createOrder(data: CreateOrderInput): Promise<AxiosResponse<Burrito[]>> 
     withCredentials: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE',
+      'Content-Type': 'application/json'
     }
   })
     .then((response: AxiosResponse<Burrito[]>) => response)

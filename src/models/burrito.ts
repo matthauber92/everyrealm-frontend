@@ -1,8 +1,8 @@
 export type BurritoSize = 'REGULAR' | 'MEDIUM' | 'LARGE' | 'XL';
 
 export interface Burrito {
-  id?: string
+  id: string
   name: string
-  size: BurritoSize;
+  size: BurritoSize | string;
   price: number;
 }

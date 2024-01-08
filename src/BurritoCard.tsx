@@ -1,30 +1,35 @@
 import {Row, Col, Card, Select, Typography} from "antd";
-import {Burrito, BurritoSize} from "./models/burrito.ts";
-import {useState} from "react";
+import {Burrito} from "./models/burrito.ts";
+import {useEffect, useState} from "react";
 import {MinusCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
+import {OrderItem} from "./models/orders.ts";
 
 interface BurritoCardProps {
+  id: string;
   name: string;
   burritoInfo: Burrito[];
-  addBurrito: (data: Burrito) => void;
-  removeBurrito: (burritoName: string, size: string) => void;
+  orderItems: OrderItem[];
+  addBurrito: (data: Burrito, quantity: number) => void;
+  removeBurrito: (burritoName: string, size: string, quantity: number) => void;
 }
 
-const BurritoCard = ({name, burritoInfo, addBurrito, removeBurrito}: BurritoCardProps) => {
+const BurritoCard = ({id, name, burritoInfo, orderItems, addBurrito, removeBurrito}: BurritoCardProps) => {
   const sizes: string[] = burritoInfo.map(x => x.size);
   const defaultPrice = burritoInfo.filter(x => x.size === 'REGULAR')[0]?.price.toLocaleString(undefined, { minimumFractionDigits: 2 });
   const [price, setPrice] = useState<string>(defaultPrice)
-  const [selectedSize, setSelectedSize] = useState<string>("");
-  const [quanity, setQuantity] = useState<number>(0);
+  const [selectedSize, setSelectedSize] = useState<string>("REGULAR");
+  const [quantity, setQuantity] = useState<number>(0);
 
   const handleAdd = () => {
-    setQuantity(quanity + 1)
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity)
     const newBurrito: Burrito = {
+      id,
       name,
-      size: selectedSize as BurritoSize,
-      price: Number(price),
+      size: selectedSize,
+      price: Number(price)
     }
-    addBurrito(newBurrito);
+    addBurrito(newBurrito, newQuantity);
   }
 
   const handleChange = (val: string) => {
@@ -35,6 +40,12 @@ const BurritoCard = ({name, burritoInfo, addBurrito, removeBurrito}: BurritoCard
     setQuantity(0);
   }
 
+  useEffect(() => {
+    if(orderItems.length === 0) {
+      setQuantity(0);
+    }
+  }, [orderItems]);
+
   return (
     <Card
       title={name}
@@ -43,13 +54,14 @@ const BurritoCard = ({name, burritoInfo, addBurrito, removeBurrito}: BurritoCard
       extra={(
         <Row gutter={[32, 32]}>
           <Col span={8}>
-            <MinusCircleOutlined style={{fontSize: 24}} onClick={() => {
-              quanity > 0 && setQuantity(quanity - 1);
-              removeBurrito(name, selectedSize);
+            <MinusCircleOutlined style={{fontSize: 24}} onClick={async () => {
+              const newQuantity = quantity > 0 ? quantity - 1 : 0;
+              setQuantity(newQuantity);
+              removeBurrito(name, selectedSize, newQuantity);
             }} />
           </Col>
           <Col span={8} className="text-center">
-            <Typography>{quanity}</Typography>
+            <Typography>{quantity}</Typography>
           </Col>
           <Col span={8}>
             <PlusCircleOutlined style={{fontSize: 24}} onClick={() => handleAdd()} />

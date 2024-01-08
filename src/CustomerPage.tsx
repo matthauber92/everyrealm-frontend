@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
-import {BurritoService} from "./services";
+import {BurritoService, OrderService} from "./services";
 import {AxiosError, AxiosResponse} from "axios";
-import {Row, Col} from "antd";
+import {Row, Col, message} from "antd";
 import {Burrito} from "./models/burrito.ts";
 import BurritoCard from "./BurritoCard.tsx";
 import {OrderItem} from "./models/orders.ts";
+import Checkout from "./Checkout.tsx";
 
 const CustomerPage = () => {
   const [burritos, setBurritos] = useState<Burrito[]>([]);
@@ -12,12 +13,26 @@ const CustomerPage = () => {
 
   useEffect(() => {
     BurritoService.getBurritos().then((res: AxiosResponse) => {
-      console.log(res, "BURRITOS")
       setBurritos(res.data);
     }).catch((e: AxiosError) => {
       console.log(e);
     });
   }, []);
+
+  const handleCheckout = (cost: number) => {
+    const order = {
+      orderItems,
+      totalCost: cost
+    }
+
+    OrderService.createOrder(order).then(() => {
+      setOrderItems([]);
+      message.success("Order has been placed.")
+    }).catch((e: AxiosError) => {
+      console.log(e);
+      message.error("Error placing order. Please try again.")
+    });
+  }
 
   return (
     <div className="m-3">
@@ -29,39 +44,60 @@ const CustomerPage = () => {
               .map((burrito, idx) => (
                 <Col span={24} key={`${burrito.name}-${idx}`}>
                   <BurritoCard
+                    id={burrito.id}
                     name={burrito.name}
+                    orderItems={orderItems}
                     burritoInfo={burritos.filter(x => x.name === burrito.name)}
-                    addBurrito={(value: Burrito) => {
-                      let item = orderItems.filter(x => x.burrito.name === value.name && x.burrito.size === value.size)[0];
-                      const newOrderItems = orderItems.filter(x => x.burrito.name !== value.name && x.burrito.size !== value.size);
+                    addBurrito={(value: Burrito, quantity) => {
+                      setOrderItems(prevOrderItems => {
+                        const updatedOrderItems = prevOrderItems.map(item => {
+                          if (item.burrito.name === value.name && item.burrito.size === value.size) {
+                            return {
+                              ...item,
+                              quantity: quantity,
+                              options: []
+                            };
+                          }
+                          return item;
+                        });
 
-                      const orderItem = {
-                        quantity: item.quantity + 1,
-                        burrito: value
-                      }
-                      setOrderItems([
-                        ...newOrderItems,
-                        orderItem
-                      ]);
+                        const newItem = {
+                          quantity: quantity,
+                          burrito: value,
+                          options: []
+                        };
+
+                        if (!updatedOrderItems.some(item => item.burrito.name === value.name && item.burrito.size === value.size)) {
+                          updatedOrderItems.push(newItem);
+                        }
+
+                        return updatedOrderItems;
+                      });
                     }}
-                    removeBurrito={(name, size) => {
-                      let orderItem = orderItems.filter(x => x.burrito.name === name && x.burrito.size === size)[0];
+                    removeBurrito={(name, size, quantity) => {
+                      setOrderItems(prevOrderItems => {
+                        const updatedOrderItems = prevOrderItems.map(item => {
+                          if (item.burrito.name === name && item.burrito.size === size) {
+                            item.quantity = quantity > 0 ? quantity : 0;
+                          }
+                          return item;
+                        });
 
-                      if(orderItem.quantity > 0) {
-                        orderItem.quantity = orderItem.quantity - 1;
-                        let newOrderItems = orderItems.filter(x => x.burrito.name !== orderItem.burrito.name && x.burrito.size !== orderItem.burrito.size);
+                        // Filter out items with quantity 0
+                        const filteredOrderItems = updatedOrderItems.filter(item => !(item.quantity === 0));
 
-                        setOrderItems([
-                            ...newOrderItems,
-                          orderItem
-                        ]);
-                        console.log(orderItems)
-                      }
+                        return filteredOrderItems;
+                      });
                     }}
                   />
                 </Col>
               ))}
           </Row>
+        </Col>
+        <Col span={12}>
+          <Checkout
+            items={orderItems}
+            handleCheckout={(val: string) => handleCheckout(parseFloat(val))} />
         </Col>
       </Row>
     </div>
