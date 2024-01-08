@@ -3,13 +3,11 @@ import {AxiosResponse, AxiosError} from "axios";
 import {Burrito} from "../models/burrito.ts";
 import {CreateOrderInput, Order} from "../models/orders.ts";
 
-const API_KEY = localStorage.getItem("apiKey");
-
-function getOrders(): Promise<AxiosResponse<Order[]>> {
+function getOrders(key: string): Promise<AxiosResponse<Order[]>> {
   return api.get('api/orders', {
     withCredentials: true,
     headers: {
-      'X-API-KEY': API_KEY,
+      'X-API-KEY': key,
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
     }
@@ -18,11 +16,11 @@ function getOrders(): Promise<AxiosResponse<Order[]>> {
     .catch((error: AxiosError) => Promise.reject(error));
 }
 
-function getOrderById(id: string): Promise<AxiosResponse<Order>> {
+function getOrderById(id: string, key: string): Promise<AxiosResponse<Order>> {
   return api.get(`api/orders/${id}`, {
     withCredentials: true,
     headers: {
-      'X-API-KEY': API_KEY,
+      'X-API-KEY': key,
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
     }

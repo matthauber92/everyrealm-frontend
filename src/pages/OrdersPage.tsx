@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {Row, Col, Input, Button, message, Table, Modal, List, Typography, Divider} from "antd";
-import {AxiosError, AxiosResponse} from "axios";
 import {getOrderById, getOrders} from "../services/OrderService.ts";
 import {Order} from "../models/orders.ts";
 import {InfoCircleFilled} from "@ant-design/icons";
@@ -23,7 +22,7 @@ const columns = [
 ]
 const OrdersPage = () => {
   const [loadingOrders, setLoadingOrders] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [key, setKey] = useState<string | null>(null);
   const [password, setPassword] = useState<string>("");
   const [orders, setOrders] = useState<Order[]>([]);
   const [order, setOrder] = useState<Order | null>(null);
@@ -35,35 +34,52 @@ const OrdersPage = () => {
         return;
       }
       localStorage.setItem("apiKey", password);
-      setIsLoggedIn(true);
+      setKey(password);
       await getAllOrders();
     }
   }
 
   const getAllOrders = async () => {
-    setLoadingOrders(true);
-    await getOrders().then((res: AxiosResponse) => {
-      setOrders(res.data);
-      console.log(res, "DATA")
+    try {
+      setLoadingOrders(true);
+      const localKey = localStorage.getItem('apiKey');
+
+      // use key for authenticated routes
+      if (localKey) {
+        setKey(localKey);
+        const response = await getOrders(localKey);
+        setOrders(response.data);
+        setLoadingOrders(false);
+        return response;
+      } else {
+        setLoadingOrders(false);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
       setLoadingOrders(false);
-      return res
-    }).catch((e: AxiosError) => {
-      console.log(e);
-      setLoadingOrders(false);
-    })
-  }
+    }
+  };
 
   useEffect(() => {
-    const key = localStorage.getItem('apiKey');
-    if (key) {
-      setIsLoggedIn(true);
-      getAllOrders();
-    }
+    const fetchData = async () => {
+      try {
+        const key = localStorage.getItem('apiKey');
+        if (key) {
+          setKey(key);
+          await getAllOrders();
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+
   }, []);
 
   return (
     <>
-      {!isLoggedIn && (
+      {!key && (
         <Row justify="center" align="middle" style={{height: '100vh'}}>
           <Col span={24}>
             <div className="text-center">
@@ -86,7 +102,7 @@ const OrdersPage = () => {
       )}
       <Row className="mt-5">
         <Col span={24}>
-          {isLoggedIn && (
+          {key && (
             <Table
               dataSource={orders}
               columns={columns}
@@ -95,7 +111,7 @@ const OrdersPage = () => {
               onRow={(record) => {
                 return {
                   onClick: () => {
-                    getOrderById(record.id).then(res => {
+                    getOrderById(record.id, key).then(res => {
                       setOrder(res.data);
                       console.log(order, "ORDER DATA")
                     }).catch((e) => {
