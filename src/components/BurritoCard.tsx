@@ -1,8 +1,8 @@
-import {Row, Col, Card, Select, Typography} from "antd";
-import {Burrito} from "../models/burrito.ts";
 import {useEffect, useState} from "react";
+import {Row, Col, Card, Select, Typography} from "antd";
+import {Burrito} from "@models/burrito.ts";
 import {MinusCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
-import {OrderItem} from "../models/orders.ts";
+import {OrderItem} from "@models/orders.ts";
 
 interface BurritoCardProps {
   name: string;

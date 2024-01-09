@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Row, Col, Input, Button, message, Table, Modal, List, Typography, Divider} from "antd";
-import {getOrderById, getOrders} from "../services/OrderService.ts";
-import {Order} from "../models/orders.ts";
+import {getOrderById, getOrders} from "@services/OrderService.ts";
+import {Order} from "@models/orders.ts";
 import {InfoCircleFilled} from "@ant-design/icons";
 
 const columns = [
@@ -84,8 +84,15 @@ const OrdersPage = () => {
             <div className="text-center">
               <div style={{marginLeft: 300, marginRight: 300}}>
                 <Input
+                  type="password"
                   style={{marginBottom: '8px', width: '100%', fontSize: '14px', padding: '8px'}}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  onKeyDown={(e) => {
+                    if(e.key === "Enter") {
+                      login();
+                      }
+                  }}
                 />
                 <Button
                   block

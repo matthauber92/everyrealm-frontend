@@ -1,7 +1,7 @@
-import api from '../utils/api';
+import api from '@utils/api';
 import {AxiosResponse, AxiosError} from "axios";
-import {Burrito} from "../models/burrito.ts";
-import {CreateOrderInput, Order} from "../models/orders.ts";
+import {Burrito} from "@models/burrito.ts";
+import {CreateOrderInput, Order} from "@models/orders.ts";
 
 function getOrders(key: string): Promise<AxiosResponse<Order[]>> {
   return api.get('api/orders', {

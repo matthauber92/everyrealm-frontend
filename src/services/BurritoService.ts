@@ -1,6 +1,6 @@
-import api from '../utils/api';
+import api from '@utils/api';
 import {AxiosResponse, AxiosError} from "axios";
-import {Burrito} from "../models/burrito.ts";
+import {Burrito} from "@models/burrito.ts";
 
 function getBurritos(): Promise<AxiosResponse<Burrito[]>> {
   return api.get('api/burrito', {

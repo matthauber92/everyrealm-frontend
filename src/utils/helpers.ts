@@ -1,4 +1,4 @@
-import {OrderItem} from "../models/orders.ts";
+import {OrderItem} from "@models/orders.ts";
 
 interface Burritos {
   key: string;

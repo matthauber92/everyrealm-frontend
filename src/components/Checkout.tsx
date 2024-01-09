@@ -1,7 +1,7 @@
-import {OrderItem} from "../models/orders.ts";
+import {OrderItem} from "@models/orders.ts";
 import {List, Card, Divider, Typography, Button, Modal} from "antd";
 import {ShoppingCartOutlined} from "@ant-design/icons";
-import {getOrderTotal} from "../utils/helpers.ts";
+import {getOrderTotal} from "@utils/helpers.ts";
 const { confirm } = Modal;
 
 interface CheckoutProps {

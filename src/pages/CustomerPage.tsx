@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 import {AxiosError, AxiosResponse} from "axios";
 import {Row, Col, message} from "antd";
-import {Burrito} from "../models/burrito.ts";
-import {OrderItem} from "../models/orders.ts";
-import BurritoCard from "../components/BurritoCard.tsx";
-import Checkout from "../components/Checkout.tsx";
-import {createOrder} from "../services/OrderService.ts";
-import {getBurritos} from "../services/BurritoService.ts";
+import {Burrito} from "@models/burrito.ts";
+import {OrderItem} from "@models/orders.ts";
+import BurritoCard from "@components/BurritoCard.tsx";
+import Checkout from "@components/Checkout.tsx";
+import {createOrder} from "@services/OrderService.ts";
+import {getBurritos} from "@services/BurritoService.ts";
 
 const CustomerPage = () => {
   const [burritos, setBurritos] = useState<Burrito[]>([]);
