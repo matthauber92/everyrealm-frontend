@@ -56,6 +56,7 @@ const Checkout = ({items, handleCheckout}: CheckoutProps) => {
       </Typography>
       <Button
         className="float-end"
+        type="primary"
         disabled={items.length === 0}
         onClick={ () => showConfirm(getOrderTotal(items))}
       >Checkout</Button>
