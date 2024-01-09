@@ -50,9 +50,9 @@ const Checkout = ({items, handleCheckout}: CheckoutProps) => {
         }}
       />
       <Divider className="mt-3 mb-3"/>
-      <Typography style={{fontWeight: 'bold'}}>Total:</Typography>
+      <Typography style={{fontWeight: 'bold'}}>Order Total:</Typography>
       <Typography className="float-start">
-        Order Total: ${getOrderTotal(items)}
+        ${getOrderTotal(items)}
       </Typography>
       <Button
         className="float-end"
