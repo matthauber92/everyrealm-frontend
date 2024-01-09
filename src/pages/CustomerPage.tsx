@@ -45,7 +45,6 @@ const CustomerPage = () => {
               .map((burrito, idx) => (
                 <Col span={24} key={`${burrito.name}-${idx}`}>
                   <BurritoCard
-                    id={burrito.id}
                     name={burrito.name}
                     orderItems={orderItems}
                     burritoInfo={burritos.filter(x => x.name === burrito.name)}

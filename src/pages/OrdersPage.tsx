@@ -3,7 +3,6 @@ import {Row, Col, Input, Button, message, Table, Modal, List, Typography, Divide
 import {getOrderById, getOrders} from "../services/OrderService.ts";
 import {Order} from "../models/orders.ts";
 import {InfoCircleFilled} from "@ant-design/icons";
-import {getOrderTotal} from "../utils/helpers.ts";
 
 const columns = [
   {
@@ -108,6 +107,7 @@ const OrdersPage = () => {
               columns={columns}
               loading={loadingOrders}
               rowKey={(row) => row.id}
+              style={{cursor: 'pointer'}}
               onRow={(record) => {
                 return {
                   onClick: () => {
@@ -155,7 +155,7 @@ const OrdersPage = () => {
         <div className="mb-3">
           <Typography style={{fontWeight: 'bold'}}>Order Total:</Typography>
           <Typography className="float-start">
-            ${order?.orderItems ? getOrderTotal(order?.orderItems) : 0.00}
+            ${order?.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </Typography>
         </div>
       </Modal>

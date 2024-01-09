@@ -5,7 +5,6 @@ import {MinusCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {OrderItem} from "../models/orders.ts";
 
 interface BurritoCardProps {
-  id: string;
   name: string;
   burritoInfo: Burrito[];
   orderItems: OrderItem[];
@@ -14,7 +13,7 @@ interface BurritoCardProps {
 }
 
 const sizes = ['REGULAR', 'MEDIUM', 'LARGE', 'XL'];
-const BurritoCard = ({id, name, burritoInfo, orderItems, addBurrito, removeBurrito}: BurritoCardProps) => {
+const BurritoCard = ({name, burritoInfo, orderItems, addBurrito, removeBurrito}: BurritoCardProps) => {
   const defaultPrice = burritoInfo.filter(x => x.size === 'REGULAR')[0]?.price.toLocaleString(undefined, { minimumFractionDigits: 2 });
   const [price, setPrice] = useState<string>(defaultPrice)
   const [selectedSize, setSelectedSize] = useState<string>("REGULAR");
@@ -24,7 +23,7 @@ const BurritoCard = ({id, name, burritoInfo, orderItems, addBurrito, removeBurri
     const newQuantity = quantity + 1;
     setQuantity(newQuantity)
     const newBurrito: Burrito = {
-      id,
+      id: burritoInfo.filter(x => x.size === selectedSize)[0]?.id,
       name,
       size: selectedSize,
       price: Number(price)
@@ -50,6 +49,7 @@ const BurritoCard = ({id, name, burritoInfo, orderItems, addBurrito, removeBurri
     <Card
       title={name}
       bordered={false}
+      type="inner"
       hoverable
       extra={(
         <Row gutter={[32, 32]}>
