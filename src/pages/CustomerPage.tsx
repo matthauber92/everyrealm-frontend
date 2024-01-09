@@ -38,7 +38,7 @@ const CustomerPage = () => {
   return (
     <div className="m-3">
       <Row gutter={[32, 32]}>
-        <Col span={12}>
+        <Col sm={24} md={12}>
           <Row gutter={[16, 16]}>
             {burritos
               .filter((burrito, index, self) => self.findIndex(b => b.name === burrito.name) === index)
@@ -94,7 +94,7 @@ const CustomerPage = () => {
               ))}
           </Row>
         </Col>
-        <Col span={12}>
+        <Col sm={24} md={12}>
           <Checkout
             items={orderItems}
             handleCheckout={(val: string) => handleCheckout(parseFloat(val))} />
