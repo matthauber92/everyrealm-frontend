@@ -14,9 +14,9 @@ npm install
 1. Run the development server: `npm run dev`
 2. Open your browser and visit: `http://localhost:3000`
 
-## Customer Route Login
+## Employee Route Login
 
-To access the customer route in Every Realm Frontend, you need to use the following credentials:
+To access the employee route in Every Realm Frontend, you need to use the following credentials:
 
 - **Password:** `every-realm`
 
