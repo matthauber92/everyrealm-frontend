@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Row, Col, Input, Button, message, Table, Modal, List, Typography, Divider} from "antd";
 import {getOrderById, getOrders} from "@services/OrderService.ts";
-import {Order} from "@models/orders.ts";
+import {Order, OrderItem} from "@models/orders.ts";
 import {InfoCircleFilled} from "@ant-design/icons";
 
 const columns = [
@@ -11,9 +11,17 @@ const columns = [
     key: 'id'
   },
   {
+    title: 'Order Items',
+    dataIndex: 'orderItems',
+    key: 'orderItems',
+    render: (item: OrderItem[]) => (
+      <span>{item.length}</span>
+    )
+  },
+  {
     title: 'Order Total',
     dataIndex: 'totalCost',
-    key: 'id',
+    key: 'totalCost',
     render: (item: number) => (
       <span>${item.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
     )
