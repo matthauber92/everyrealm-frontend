@@ -15,7 +15,7 @@ const columns = [
     dataIndex: 'orderItems',
     key: 'orderItems',
     render: (item: OrderItem[]) => (
-      <span>{item.length}</span>
+      <span>{item.map(x => x.quantity).reduce((prev, curr) => prev + curr, 0)}</span>
     )
   },
   {
